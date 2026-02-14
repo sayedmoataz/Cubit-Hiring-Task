@@ -3,7 +3,6 @@ import 'package:get_it/get_it.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../services/local_storage/config/box_names.dart';
-import '../../services/local_storage/config/hive_config.dart';
 import '../../services/local_storage/contracts/hive_consumer.dart';
 import '../../services/local_storage/factory/hive_service_factory.dart';
 import '../../services/local_storage/utils/encryption_helper.dart';
@@ -32,12 +31,10 @@ Future<void> initLocalStorage() async {
 
     // Create Hive consumer with encryption
     final hiveConsumer = await HiveServiceFactory.create(
-      config: HiveConfig(
-        storagePath: storagePath,
-        encryptionKey: encryptionKey,
+      storagePath: storagePath,
+      encryptionKey: encryptionKey,
         adapters: [],
-        boxesToPreload: BoxNames.preloadBoxes,
-      ),
+      boxesToPreload: BoxNames.preloadBoxes,
     );
 
     // Register as lazy singleton
@@ -63,7 +60,8 @@ Future<void> clearUserData() async {
     for (var boxName in BoxNames.userSpecificBoxes) {
       final result = await hiveConsumer.clearBox(boxName: boxName);
       result.fold(
-        (failure) => debugPrint('[LocalStorage] Failed to clear $boxName: $failure'),
+        (failure) =>
+            debugPrint('[LocalStorage] Failed to clear $boxName: $failure'),
         (_) => debugPrint('[LocalStorage] Cleared $boxName ✅'),
       );
     }
@@ -85,7 +83,8 @@ Future<void> clearCacheData() async {
     for (var boxName in BoxNames.cacheBoxes) {
       final result = await hiveConsumer.clearBox(boxName: boxName);
       result.fold(
-        (failure) => debugPrint('[LocalStorage] Failed to clear $boxName: $failure'),
+        (failure) =>
+            debugPrint('[LocalStorage] Failed to clear $boxName: $failure'),
         (_) => debugPrint('[LocalStorage] Cleared $boxName ✅'),
       );
     }
@@ -98,9 +97,6 @@ Future<void> clearCacheData() async {
 }
 
 /// Complete reset (use for app reset or factory reset)
-///
-/// WARNING: This will delete ALL data and encryption key!
-/// After this, all encrypted data becomes unreadable.
 Future<void> resetLocalStorage() async {
   try {
     debugPrint('[LocalStorage] Performing complete reset...');

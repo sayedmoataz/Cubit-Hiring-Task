@@ -122,4 +122,14 @@ class AppStrings {
 
   static const String loadingBranches = 'Loading branches...';
   static const String findingNearbyLocations = 'Finding nearby locations';
+
+  static const String signIn = 'Sign In';
+  static const String signUp = 'Sign Up';
+  static const String iAmNewUser = "I'm a new user.";
+  static const String signInLink = 'Sign In';
+  static const String emailAddress = 'Email Address';
+  static const String password = 'Password';
+  static const String alreadyHaveAccount = 'Already have an account.';
+  static const String fullName = 'Full Name';
+  static const String phoneNumber = 'Phone Number';
 }

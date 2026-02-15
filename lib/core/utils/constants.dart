@@ -105,7 +105,9 @@ class AppConstants {
   static const String unauthorizedErrorMessage =
       'Unauthorized. Please login again.';
 
-  static const String initialCountryCode = 'EG';
-  static const String initialCountryCodeDialCode = '+20';
+  static const String emailHint = 'tanyamyroniuk@gmail.com';
+  static const String passwordHint = '••••••••';
+  static const String fullNameHint = 'John Doe';
+  static const String phoneNumberHint = '+201234567890';
 
 }

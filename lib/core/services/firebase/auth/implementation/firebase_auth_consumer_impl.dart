@@ -138,6 +138,24 @@ class FirebaseAuthConsumerImpl implements FirebaseAuthConsumer {
       return Left(FirebaseErrorHandler.handleException(e, stackTrace));
     }
   }
+  
+  @override
+  Future<Either<Failure, Unit>> signOut() async {
+    try {
+      await _firebaseAuth.signOut();
+      _log('User signed out successfully');
+      return const Right(unit);
+    } on FirebaseAuthException catch (e, stackTrace) {
+      _log('Firebase auth error during sign out: ${e.code} - ${e.message}');
+      CrashlyticsLogger.logError(e, stackTrace);
+      return Left(FirebaseErrorHandler.handleAuthException(e));
+    } catch (e, stackTrace) {
+      _log('Unexpected error during sign out: $e');
+      CrashlyticsLogger.logError(e, stackTrace);
+      return Left(FirebaseErrorHandler.handleException(e, stackTrace));
+    }
+  }
+  
   // ============= USER MANAGEMENT =============
 
   @override

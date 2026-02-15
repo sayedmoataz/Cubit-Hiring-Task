@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../../features/branches/data/models/branch_model.dart';
 import '../../services/local_storage/config/box_names.dart';
 import '../../services/local_storage/contracts/hive_consumer.dart';
 import '../../services/local_storage/factory/hive_service_factory.dart';
@@ -33,7 +34,7 @@ Future<void> initLocalStorage() async {
     final hiveConsumer = await HiveServiceFactory.create(
       storagePath: storagePath,
       encryptionKey: encryptionKey,
-        adapters: [],
+      adapters: [BranchModelAdapter()],
       boxesToPreload: BoxNames.preloadBoxes,
     );
 

@@ -22,6 +22,17 @@
     <string>????</string>
     <key>CFBundleVersion</key>
     <string>$(FLUTTER_BUILD_NUMBER)</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need your location to show nearby branches and ATMs.</string>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>geo</string>
+      <string>google.navigation</string>
+      <string>tel</string>
+    </array>
+    <key>NSFaceIDUsageDescription</key>
+
+    <string>Why is my app authenticating using face id?</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>UILaunchStoryboardName</key>

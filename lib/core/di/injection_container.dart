@@ -4,6 +4,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 import '../../firebase_options.dart';
 import '../network/network_info.dart';
+import '../services/navigation/navigation_service.dart';
 import '../services/performance/performance_service.dart';
 import 'blocs_injections.dart';
 import 'datasources_injections.dart';
@@ -26,6 +27,7 @@ Future<void> initEssentialServices() async {
   sl.registerLazySingleton<PerformanceService>(
     () => PerformanceService.instance,
   );
+  sl.registerLazySingleton<NavigationService>(() => NavigationService.instance);
 
   //! Network
   sl.registerLazySingleton(InternetConnectionChecker.createInstance);
@@ -36,6 +38,13 @@ Future<void> initEssentialServices() async {
 
   //! Local Storage (Hive)
   await initLocalStorage();
+
+  //! Firebase
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await initFirebase();
+
+  //! Biometric
+  await initBiometric();
 
   initNetworking();
 
@@ -52,20 +61,4 @@ Future<void> initEssentialServices() async {
   initBlocs();
 
   PerformanceService.instance.endOperation('Essential Services Init');
-}
-
-/// Initialize remaining services after app render
-/// These can be loaded lazily after the UI is displayed
-Future<void> initRemainingServices() async {
-  PerformanceService.instance.startOperation('Remaining Services Init');
-
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  //! Firebase
-  await initFirebase();
-
-  //! Biometric
-  await initBiometric();
-
-  PerformanceService.instance.endOperation('Remaining Services Init');
 }

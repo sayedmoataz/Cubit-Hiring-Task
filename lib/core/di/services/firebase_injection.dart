@@ -15,7 +15,6 @@ Future<void> initFirebase() async {
   PerformanceService.instance.endOperation('Firebase Services');
 }
 
-
 Future<void> initFirebaseAuth() async {
   sl.registerLazySingleton<FirebaseAuthConsumer>(FirebaseAuthFactory.create);
 }

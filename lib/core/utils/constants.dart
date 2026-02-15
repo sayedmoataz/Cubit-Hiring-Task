@@ -12,6 +12,10 @@ class AppConstants {
   // image caching
   static const Duration fadeInDuration = Duration(milliseconds: 200);
   static const Duration fadeOutDuration = Duration(milliseconds: 200);
+  static const int memCacheWidth = 100;
+  static const int memCacheHeight = 100;
+  static const int maxHeightDiskCache = 100;
+  static const int maxWidthDiskCache = 100;
 
   // Pagination
   static const int defaultPageSize = 50;

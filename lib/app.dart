@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_technical_assessment/core/utils/app_strings.dart';
 
 import 'core/config/app_config.dart';
-import 'core/di/injection_container.dart' as di;
 import 'core/routes/routes.dart';
 import 'core/services/navigation/navigation_service.dart';
 import 'core/services/navigation/route_generator.dart';
@@ -28,7 +27,7 @@ class _AppState extends State<App> {
 
     // Initialize remaining services after first frame
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await di.initRemainingServices();
+      // await di.initRemainingServices();
 
       if (AppConfig.enableLogging) {
         PerformanceService.instance.printReport();
@@ -48,7 +47,7 @@ class _AppState extends State<App> {
         onGenerateTitle: (context) => AppStrings.appName,
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
-        initialRoute: Routes.home,
+        initialRoute: Routes.login,
       ),
     );
   }

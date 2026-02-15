@@ -113,4 +113,13 @@ class AppStrings {
       'Please enable GPS to use location services';
 
   String get openSettings => 'Open Settings';
+
+  static const String enableBiometricLogin =
+      'Enable biometric login for quick and secure access';
+  static const String loginToYourAccount = 'Login to your account';
+  static const String biometricAuthenticationFailed =
+      'Biometric authentication failed';
+
+  static const String loadingBranches = 'Loading branches...';
+  static const String findingNearbyLocations = 'Finding nearby locations';
 }

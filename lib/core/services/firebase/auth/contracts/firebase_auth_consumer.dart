@@ -15,6 +15,9 @@ abstract class FirebaseAuthConsumer {
 
   Future<Either<Failure, AuthUser>> signIn({required SignInRequest request});
 
+  /// Sign out the current user
+  Future<Either<Failure, Unit>> signOut();
+
   // ============= USER MANAGEMENT =============
 
   /// Get the current authenticated user

@@ -27,13 +27,8 @@ Map<String, dynamic> _$TransactionModelToJson(TransactionModel instance) =>
     };
 
 const _$TransactionCategoryEnumMap = {
-  TransactionCategory.shopping: 'shopping',
-  TransactionCategory.food: 'food',
-  TransactionCategory.transportation: 'transportation',
-  TransactionCategory.bills: 'bills',
-  TransactionCategory.entertainment: 'entertainment',
+  TransactionCategory.deposit: 'deposit',
   TransactionCategory.transfer: 'transfer',
-  TransactionCategory.atm: 'atm',
-  TransactionCategory.salary: 'salary',
-  TransactionCategory.other: 'other',
+  TransactionCategory.withdraw: 'withdraw',
+  TransactionCategory.receive: 'receive',
 };

@@ -4,60 +4,35 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/colors.dart';
 
 enum TransactionCategory {
-  shopping,
-  food,
-  transportation,
-  bills,
-  entertainment,
+  deposit,
   transfer,
-  atm,
-  salary,
-  other;
+  withdraw,
+  receive;
 
   IconData get icon {
     switch (this) {
-      case TransactionCategory.shopping:
-        return Icons.shopping_bag;
-      case TransactionCategory.food:
-        return Icons.restaurant;
-      case TransactionCategory.transportation:
-        return Icons.directions_car;
-      case TransactionCategory.bills:
-        return Icons.receipt;
-      case TransactionCategory.entertainment:
-        return Icons.movie;
+      case TransactionCategory.deposit:
+        return Icons.account_balance_wallet;
       case TransactionCategory.transfer:
         return Icons.swap_horiz;
-      case TransactionCategory.atm:
-        return Icons.atm;
-      case TransactionCategory.salary:
-        return Icons.account_balance_wallet;
-      case TransactionCategory.other:
-        return Icons.more_horiz;
+      case TransactionCategory.withdraw:
+        return Icons.money_off;
+      case TransactionCategory.receive:
+        return Icons.call_received;
     }
   }
 
   /// Get color for the category
   Color get color {
     switch (this) {
-      case TransactionCategory.shopping:
-        return AppColors.catShopping;
-      case TransactionCategory.food:
-        return AppColors.catFood;
-      case TransactionCategory.transportation:
-        return AppColors.catTransport;
-      case TransactionCategory.bills:
-        return AppColors.catBills;
-      case TransactionCategory.entertainment:
-        return AppColors.catEntertainment;
+      case TransactionCategory.deposit:
+        return AppColors.catSalary;
       case TransactionCategory.transfer:
         return AppColors.catTransfer;
-      case TransactionCategory.atm:
-        return AppColors.catAtm;
-      case TransactionCategory.salary:
+      case TransactionCategory.withdraw:
+        return AppColors.catShopping;
+      case TransactionCategory.receive:
         return AppColors.catSalary;
-      case TransactionCategory.other:
-        return AppColors.catOther;
     }
   }
 }

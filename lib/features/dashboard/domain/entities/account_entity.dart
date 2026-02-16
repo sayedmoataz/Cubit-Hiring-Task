@@ -23,4 +23,20 @@ class AccountEntity extends Equatable {
     availableBalance,
     accountHolderName,
   ];
+
+  AccountEntity copyWith({
+    String? accountNumber,
+    String? accountType,
+    double? balance,
+    double? availableBalance,
+    String? accountHolderName,
+  }) {
+    return AccountEntity(
+      accountNumber: accountNumber ?? this.accountNumber,
+      accountType: accountType ?? this.accountType,
+      balance: balance ?? this.balance,
+      availableBalance: availableBalance ?? this.availableBalance,
+      accountHolderName: accountHolderName ?? this.accountHolderName,
+    );
+  }
 }

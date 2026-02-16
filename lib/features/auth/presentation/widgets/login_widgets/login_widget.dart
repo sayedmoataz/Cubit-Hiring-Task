@@ -12,7 +12,7 @@ import '../../bloc/auth_bloc.dart';
 import '../../bloc/auth_event.dart';
 import '../../bloc/auth_state.dart';
 import 'login_form.dart';
-import 'signup_link.dart';
+import 'signin_link.dart';
 
 class LoginWidget extends StatelessWidget {
   const LoginWidget({super.key});
@@ -61,7 +61,7 @@ class LoginWidget extends StatelessWidget {
                           SizedBox(height: info.spacing(ResponsiveSpacing.xl)),
                           const LoginForm(),
                           SizedBox(height: info.spacing(ResponsiveSpacing.lg)),
-                          const SignupLink(),
+                          const SignInLink(),
                         ],
                       ),
                     ),

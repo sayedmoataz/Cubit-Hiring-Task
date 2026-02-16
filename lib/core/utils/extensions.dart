@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../theme/colors.dart';
 import 'app_strings.dart';
 
 /// String Extensions
@@ -185,5 +187,17 @@ extension NumExtension on num {
       return '${(this / (1024 * 1024)).toStringAsFixed(2)} MB';
     }
     return '${(this / (1024 * 1024 * 1024)).toStringAsFixed(2)} GB';
+  }
+}
+
+/// Color Extensions
+extension ColorExtension on String {
+  Color toColor() {
+    try {
+      final hex = replaceAll('#', '');
+      return Color(int.parse('FF$hex', radix: 16));
+    } catch (e) {
+      return AppColors.primary;
+    }
   }
 }

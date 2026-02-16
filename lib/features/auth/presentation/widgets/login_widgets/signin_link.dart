@@ -6,8 +6,8 @@ import '../../../../../core/services/services.dart';
 import '../../../../../core/theme/colors.dart';
 import '../../../../../core/utils/app_strings.dart';
 
-class SignupLink extends StatelessWidget {
-  const SignupLink({super.key});
+class SignInLink extends StatelessWidget {
+  const SignInLink({super.key});
 
   @override
   Widget build(BuildContext context) {

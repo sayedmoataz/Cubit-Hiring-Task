@@ -25,6 +25,7 @@ class AppConstants {
   static const Duration shortAnimationDuration = Duration(milliseconds: 200);
   static const Duration mediumAnimationDuration = Duration(milliseconds: 300);
   static const Duration longAnimationDuration = Duration(milliseconds: 500);
+  static const Duration dashboardLoadingDuration = Duration(milliseconds: 800);
 
   // Spacing
   static const double spacingXS = 4.0;

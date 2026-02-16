@@ -23,7 +23,10 @@ void initBlocs() {
   );
 
   // Dashboard
-  sl.registerFactory(DashboardBloc.new);
+  // Dashboard
+  sl.registerFactory(
+    () => DashboardBloc(authRepository: sl(), networkInfo: sl()),
+  );
 
   // Branches
   sl.registerFactory(

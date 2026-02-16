@@ -132,4 +132,15 @@ class AppStrings {
   static const String alreadyHaveAccount = 'Already have an account.';
   static const String fullName = 'Full Name';
   static const String phoneNumber = 'Phone Number';
+  static const String welcomeBack = 'Welcome back,';
+
+  static const String accountHolder = 'Account Holder';
+  static const String available = 'Available';
+  static const String cardHolder = 'Card Holder';
+  static const String expiry = 'Expiry';
+
+  static const String seeAll = 'See All';
+  static const String transaction = 'Transaction';
+  static const String noTransactionsYet = 'No transactions yet';
+  static const String findBranch = 'Find Branch';
 }

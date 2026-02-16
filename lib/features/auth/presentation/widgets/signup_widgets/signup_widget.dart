@@ -1,6 +1,6 @@
+import 'package:advanced_responsive/advanced_responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:advanced_responsive/advanced_responsive.dart';
 import 'package:flutter_technical_assessment/core/widgets/custom_toast/custom_toast.dart';
 
 import '../../../../../core/di/injection_container.dart';
@@ -10,10 +10,8 @@ import '../../../../../core/theme/colors.dart';
 import '../../../../../core/utils/app_strings.dart';
 import '../../bloc/auth_bloc.dart';
 import '../../bloc/auth_state.dart';
-import '../login_widgets/signup_link.dart';
 import 'signup_form.dart';
-
-
+import 'signup_link.dart';
 
 class SignUpWidget extends StatelessWidget {
   const SignUpWidget({super.key});
@@ -41,6 +39,7 @@ class SignUpWidget extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(height: info.spacing(ResponsiveSpacing.xl)),
                     Text(
                       AppStrings.signUp,
                       style: TextStyle(
@@ -52,7 +51,7 @@ class SignUpWidget extends StatelessWidget {
                     SizedBox(height: info.spacing(ResponsiveSpacing.xl)),
                     const SignUpForm(),
                     SizedBox(height: info.spacing(ResponsiveSpacing.lg)),
-                    const SignupLink(),
+                    const SignUpLink(),
                     SizedBox(height: info.spacing(ResponsiveSpacing.lg)),
                   ],
                 ),

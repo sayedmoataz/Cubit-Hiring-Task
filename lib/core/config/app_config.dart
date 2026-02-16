@@ -3,7 +3,7 @@ class AppConfig {
   AppConfig._();
 
   // Environment
-  static const bool enableLogging = true;
+  static const bool enableLogging = false;
 
   // API Configuration
   static String get baseUrl {

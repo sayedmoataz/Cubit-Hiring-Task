@@ -10,6 +10,7 @@ import '../../../../core/widgets/map/map_utils.dart';
 import '../bloc/branches_bloc.dart';
 import 'branch_card/branch_details_card.dart';
 import 'map_error_widget.dart';
+import 'map_shimmer.dart';
 
 class MapWidget extends StatefulWidget {
   const MapWidget({super.key});
@@ -53,6 +54,10 @@ class _MapWidgetState extends State<MapWidget> with TickerProviderStateMixin {
                     info: info,
                     defaultZoom: defaultZoom,
                   ),
+
+                  // loading overlay
+                  if (state is BranchesLoading)
+                    const Center(child: MapShimmer()),
 
                   // Error Overlay
                   if (state is BranchesError)

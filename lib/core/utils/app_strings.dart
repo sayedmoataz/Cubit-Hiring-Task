@@ -148,4 +148,9 @@ class AppStrings {
   static const String retry = 'Retry';
 
   static const String getDirections = 'Get Directions';
+
+  static const String favorites = 'Favorites';
+  static const String errorLoadingFavorites = 'Error Loading Favorites';
+  static const String noFavoritesYet = 'No Favorites Yet';
+  static const String addBranchesToYourFavoritesToSeeThemHere = 'Add branches to your favorites to see them here';
 }

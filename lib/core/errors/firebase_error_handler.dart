@@ -2,15 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'failure.dart';
 
-
-/// Utility class for mapping Firebase exceptions to domain Failure types
-///
-/// Centralizes error handling logic and provides consistent error messages
 class FirebaseErrorHandler {
-  /// Map FirebaseAuthException to appropriate Failure type
-  ///
-  /// Handles all common Firebase Auth error codes and maps them
-  /// to the appropriate domain Failure type with user-friendly messages
   static Failure handleAuthException(FirebaseAuthException exception) {
     switch (exception.code) {
       // Authentication Failures
@@ -164,5 +156,81 @@ class FirebaseErrorHandler {
           exception.code == 'invalid-credential';
     }
     return false;
+  }
+
+   static Failure handle(FirebaseException exception) {
+    switch (exception.code) {
+      // Permission errors
+      case 'permission-denied':
+        return const UnauthorizedFailure(
+          message: 'You don\'t have permission to access this data',
+        );
+
+      // Not found
+      case 'not-found':
+        return const NotFoundFailure(
+          message: 'The requested document was not found',
+        );
+
+      // Already exists
+      case 'already-exists':
+        return const ValidationFailure(message: 'This document already exists');
+
+      // Network errors
+      case 'unavailable':
+        return const NetworkFailure(
+          message: 'Firestore service is currently unavailable',
+        );
+
+      // Timeout
+      case 'deadline-exceeded':
+        return const TimeoutFailure(
+          type: TimeoutType.receive,
+          message: 'The operation timed out',
+        );
+
+      // Rate limiting
+      case 'resource-exhausted':
+        return const ServerFailure(
+          message: 'Too many requests. Please try again later',
+        );
+
+      // Cancelled
+      case 'cancelled':
+        return const CancelFailure(message: 'The operation was cancelled');
+
+      // Internal errors
+      case 'data-loss':
+      case 'internal':
+        return const ServerFailure(message: 'An internal error occurred');
+
+      // Validation errors
+      case 'invalid-argument':
+        return const ValidationFailure(message: 'Invalid data provided');
+
+      case 'failed-precondition':
+        return const ValidationFailure(
+          message: 'Operation failed due to conflicting state',
+        );
+
+      case 'out-of-range':
+        return const ValidationFailure(message: 'Value is out of valid range');
+
+      // Authentication errors
+      case 'unauthenticated':
+        return const UnauthorizedFailure(message: 'Authentication required');
+
+      // Aborted (typically due to transaction conflicts)
+      case 'aborted':
+        return const ServerFailure(
+          message: 'The operation was aborted. Please try again',
+        );
+
+      // Unknown errors
+      default:
+        return ServerFailure(
+          message: exception.message ?? 'An unknown Firestore error occurred',
+        );
+    }
   }
 }

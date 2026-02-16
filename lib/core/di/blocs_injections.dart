@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/branches/presentation/bloc/branches_bloc.dart';
 import '../../features/dashboard/presentation/bloc/dashboard_bloc.dart';
+import '../../features/favorites/presentation/bloc/favorites_bloc.dart';
 import '../services/biometric/utils/biometric_preferences.dart';
 import '../services/performance/performance_service.dart';
 
@@ -30,9 +31,11 @@ void initBlocs() {
 
   // Branches
   sl.registerFactory(
-    () =>
-        BranchesBloc(getBranchesUseCase: sl(), getNearbyBranchesUseCase: sl()),
+    () => BranchesBloc(branchesRepository: sl(), favoritesRepository: sl()),
   );
+
+  // Favorites
+  sl.registerFactory(() => FavoritesBloc(repository: sl()));
 
   PerformanceService.instance.endOperation('BLoCs Init');
 }

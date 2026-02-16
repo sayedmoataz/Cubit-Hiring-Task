@@ -27,13 +27,14 @@ class BranchModelAdapter extends TypeAdapter<BranchModel> {
       services: (fields[7] as List).cast<String>(),
       workingHours: fields[9] as String,
       phone: fields[8] as String?,
+      isFavorite: fields[10] as bool? ?? false,
     );
   }
 
   @override
   void write(BinaryWriter writer, BranchModel obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -53,7 +54,9 @@ class BranchModelAdapter extends TypeAdapter<BranchModel> {
       ..writeByte(8)
       ..write(obj.phone)
       ..writeByte(9)
-      ..write(obj.workingHours);
+      ..write(obj.workingHours)
+      ..writeByte(10)
+      ..write(obj.isFavorite);
   }
 
   @override
@@ -72,18 +75,20 @@ class BranchModelAdapter extends TypeAdapter<BranchModel> {
 // **************************************************************************
 
 BranchModel _$BranchModelFromJson(Map<String, dynamic> json) => BranchModel(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      type: json['type'] as String,
-      address: json['address'] as String,
-      latitude: (json['lat'] as num).toDouble(),
-      longitude: (json['lng'] as num).toDouble(),
-      isActive: json['is_active'] as bool,
-      services:
-          (json['services'] as List<dynamic>).map((e) => e as String).toList(),
-      workingHours: json['working_hours'] as String,
-      phone: json['phone'] as String?,
-    );
+  id: json['id'] as String,
+  name: json['name'] as String,
+  type: json['type'] as String,
+  address: json['address'] as String,
+  latitude: (json['lat'] as num).toDouble(),
+  longitude: (json['lng'] as num).toDouble(),
+  isActive: json['is_active'] as bool,
+  services: (json['services'] as List<dynamic>)
+      .map((e) => e as String)
+      .toList(),
+  workingHours: json['working_hours'] as String,
+  phone: json['phone'] as String?,
+  isFavorite: json['isFavorite'] as bool? ?? false,
+);
 
 Map<String, dynamic> _$BranchModelToJson(BranchModel instance) =>
     <String, dynamic>{
@@ -97,4 +102,5 @@ Map<String, dynamic> _$BranchModelToJson(BranchModel instance) =>
       'services': instance.services,
       'phone': instance.phone,
       'working_hours': instance.workingHours,
+      'isFavorite': instance.isFavorite,
     };

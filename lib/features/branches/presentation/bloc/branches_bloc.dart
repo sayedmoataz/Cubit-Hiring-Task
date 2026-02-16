@@ -6,25 +6,23 @@ import 'package:latlong2/latlong.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../../core/services/firebase/crashlytics/crashlytics_logger.dart';
+import '../../../favorites/domain/repositories/favorites_repository.dart';
 import '../../domain/entities/branch_entity.dart';
-import '../../domain/usecases/get_branches_usecase.dart';
-import '../../domain/usecases/get_nearby_branches_usecase.dart';
+import '../../domain/repositories/branches_repository.dart';
 
 part 'branches_event.dart';
 part 'branches_state.dart';
 
 class BranchesBloc extends Bloc<BranchesEvent, BranchesState> {
-  final GetBranchesUseCase _getBranchesUseCase;
-  final GetNearbyBranchesUseCase _getNearbyBranchesUseCase;
+  final BranchesRepository branchesRepository;
+  final FavoritesRepository favoritesRepository;
 
   static const _defaultLocation = LatLng(30.0444, 31.2357);
 
   BranchesBloc({
-    required GetBranchesUseCase getBranchesUseCase,
-    required GetNearbyBranchesUseCase getNearbyBranchesUseCase,
-  }) : _getBranchesUseCase = getBranchesUseCase,
-       _getNearbyBranchesUseCase = getNearbyBranchesUseCase,
-       super(const BranchesInitial()) {
+    required this.branchesRepository,
+    required this.favoritesRepository,
+  }) : super(const BranchesInitial()) {
     on<LoadBranchesEvent>(_onLoadBranches);
     on<RefreshBranchesEvent>(_onRefreshBranches);
     on<UpdateUserLocationEvent>(_onUpdateUserLocation);
@@ -42,14 +40,14 @@ class BranchesBloc extends Bloc<BranchesEvent, BranchesState> {
 
     try {
       final userLocation = await _getUserLocation();
-      final branchesResult = await _getBranchesUseCase();
+      final branchesResult = await branchesRepository.getBranches();
 
       await branchesResult.fold(
         (failure) async {
           emit(BranchesError(message: failure.message));
         },
         (allBranches) async {
-          final nearestResult = await _getNearbyBranchesUseCase(
+          final nearestResult = await branchesRepository.getNearestBranches(
             latitude: userLocation.latitude,
             longitude: userLocation.longitude,
           );
@@ -84,7 +82,9 @@ class BranchesBloc extends Bloc<BranchesEvent, BranchesState> {
     final currentState = state;
 
     try {
-      final branchesResult = await _getBranchesUseCase(forceRefresh: true);
+      final branchesResult = await branchesRepository.getBranches(
+        forceRefresh: true,
+      );
 
       await branchesResult.fold(
         (failure) async {
@@ -99,7 +99,7 @@ class BranchesBloc extends Bloc<BranchesEvent, BranchesState> {
               ? currentState.userLocation ?? _defaultLocation
               : await _getUserLocation();
 
-          final nearestResult = await _getNearbyBranchesUseCase(
+          final nearestResult = await branchesRepository.getNearestBranches(
             latitude: userLocation.latitude,
             longitude: userLocation.longitude,
           );
@@ -140,7 +140,7 @@ class BranchesBloc extends Bloc<BranchesEvent, BranchesState> {
 
     try {
       final newLocation = LatLng(event.latitude, event.longitude);
-      final nearestResult = await _getNearbyBranchesUseCase(
+      final nearestResult = await branchesRepository.getNearestBranches(
         latitude: event.latitude,
         longitude: event.longitude,
       );
@@ -182,7 +182,7 @@ class BranchesBloc extends Bloc<BranchesEvent, BranchesState> {
 
     try {
       final newLocation = await _getUserLocation();
-      final nearestResult = await _getNearbyBranchesUseCase(
+      final nearestResult = await branchesRepository.getNearestBranches(
         latitude: newLocation.latitude,
         longitude: newLocation.longitude,
       );
@@ -238,8 +238,85 @@ class BranchesBloc extends Bloc<BranchesEvent, BranchesState> {
     }
   }
 
-  void _onAddToFavorite(AddToFavoriteEvent event, Emitter<BranchesState> emit) {
-    // TODO: Implement toggle favorite logic
-    debugPrint('[BranchesBloc] Toggle favorite for branch: ${event.branchId}');
+  Future<void> _onAddToFavorite(
+    AddToFavoriteEvent event,
+    Emitter<BranchesState> emit,
+  ) async {
+    if (state is! BranchesLoaded) return;
+    final currentState = state as BranchesLoaded;
+
+    try {
+      final branchIndex = currentState.allBranches.indexWhere(
+        (branch) => branch.id == event.branchId,
+      );
+
+      if (branchIndex == -1) return;
+
+      final branch = currentState.allBranches[branchIndex];
+      final isFavorite = branch.isFavorite;
+
+      final updatedBranch = branch.copyWith(isFavorite: !isFavorite);
+      final updatedAllBranches = List<BranchEntity>.from(
+        currentState.allBranches,
+      );
+      updatedAllBranches[branchIndex] = updatedBranch;
+
+      final nearestIndex = currentState.nearestBranches.indexWhere(
+        (b) => b.id == event.branchId,
+      );
+      final updatedNearestBranches = List<BranchEntity>.from(
+        currentState.nearestBranches,
+      );
+      if (nearestIndex != -1) {
+        updatedNearestBranches[nearestIndex] = updatedBranch;
+      }
+
+      final updatedSelectedBranch =
+          currentState.selectedBranch?.id == event.branchId
+          ? updatedBranch
+          : null;
+
+      emit(
+        currentState.copyWith(
+          allBranches: updatedAllBranches,
+          nearestBranches: updatedNearestBranches,
+          selectedBranch: updatedSelectedBranch,
+        ),
+      );
+
+      final result = isFavorite
+          ? await favoritesRepository.removeFavorite(event.branchId)
+          : await favoritesRepository.addFavorite(branch);
+
+      result.fold(
+        (failure) {
+          emit(
+            currentState.copyWith(
+              allBranches: currentState.allBranches,
+              nearestBranches: currentState.nearestBranches,
+            ),
+          );
+
+          CrashlyticsLogger.logError(
+            Exception(failure.message),
+            StackTrace.current,
+            reason: 'Failed to ${isFavorite ? 'remove' : 'add'} favorite',
+            feature: 'Branches',
+            context: ['branchId: ${event.branchId}'],
+          );
+        },
+        (_) {
+          // Success - state already updated optimistically
+        },
+      );
+    } catch (e, stackTrace) {
+      CrashlyticsLogger.logError(
+        e,
+        stackTrace,
+        reason: 'Failed to toggle favorite',
+        feature: 'Branches',
+        context: ['branchId: ${event.branchId}'],
+      );
+    }
   }
 }

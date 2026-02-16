@@ -11,6 +11,7 @@ class BranchEntity extends Equatable {
   final List<String> services;
   final String? phone;
   final String workingHours;
+  final bool isFavorite;
 
   const BranchEntity({
     required this.id,
@@ -23,6 +24,7 @@ class BranchEntity extends Equatable {
     required this.services,
     required this.workingHours,
     this.phone,
+    this.isFavorite = false,
   });
 
   bool get isOpen => isActive && !workingHours.contains('مغلق');
@@ -30,6 +32,34 @@ class BranchEntity extends Equatable {
   bool get isBranch => type.toUpperCase() == 'BRANCH';
 
   bool get isATM => type.toUpperCase() == 'ATM';
+
+  BranchEntity copyWith({
+    String? id,
+    String? name,
+    String? type,
+    String? address,
+    double? latitude,
+    double? longitude,
+    bool? isActive,
+    List<String>? services,
+    String? phone,
+    String? workingHours,
+    bool? isFavorite,
+  }) {
+    return BranchEntity(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      type: type ?? this.type,
+      address: address ?? this.address,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+      isActive: isActive ?? this.isActive,
+      services: services ?? this.services,
+      phone: phone ?? this.phone,
+      workingHours: workingHours ?? this.workingHours,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
 
   @override
   List<Object?> get props => [
@@ -43,5 +73,6 @@ class BranchEntity extends Equatable {
     services,
     phone,
     workingHours,
+    isFavorite,
   ];
 }

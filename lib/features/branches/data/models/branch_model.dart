@@ -1,3 +1,5 @@
+// ignore_for_file: overridden_fields
+
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -52,6 +54,11 @@ class BranchModel extends BranchEntity {
   @override
   final String workingHours;
 
+  @HiveField(10)
+  @JsonKey(name: 'is_favorite')
+  @override
+  final bool isFavorite;
+
   const BranchModel({
     required this.id,
     required this.name,
@@ -63,6 +70,7 @@ class BranchModel extends BranchEntity {
     required this.services,
     required this.workingHours,
     this.phone,
+    this.isFavorite = false,
   }) : super(
          id: id,
          name: name,
@@ -74,6 +82,7 @@ class BranchModel extends BranchEntity {
          services: services,
          workingHours: workingHours,
          phone: phone,
+         isFavorite: isFavorite,
        );
 
   factory BranchModel.fromJson(Map<String, dynamic> json) =>
@@ -92,5 +101,6 @@ class BranchModel extends BranchEntity {
     services: entity.services,
     workingHours: entity.workingHours,
     phone: entity.phone,
+    isFavorite: entity.isFavorite,
   );
 }

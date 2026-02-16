@@ -1,7 +1,9 @@
 // lib/features/dashboard/presentation/widgets/dashboard_header.dart
 import 'package:advanced_responsive/advanced_responsive.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_technical_assessment/core/services/navigation/navigation_extensions.dart';
 
+import '../../../../core/routes/routes.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/utils/app_strings.dart';
 
@@ -43,16 +45,18 @@ class DashboardHeader extends StatelessWidget {
                 ),
               ],
             ),
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.notifications_outlined,
-                color: AppColors.primary,
+            InkWell(
+              onTap: () {
+                context.navigateTo(Routes.favorites);
+              },
+              child: Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.favorite, color: AppColors.primary),
               ),
             ),
           ],

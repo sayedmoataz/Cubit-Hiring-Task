@@ -2,6 +2,7 @@ import '../../features/auth/presentation/pages/login_screen.dart';
 import '../../features/auth/presentation/pages/signup_screen.dart';
 import '../../features/branches/presentation/pages/map_screen.dart';
 import '../../features/dashboard/presentation/pages/dashboard_screen.dart';
+import '../../features/favorites/presentation/pages/favorites_screen.dart';
 import 'route_config.dart';
 
 final routes = [
@@ -12,6 +13,10 @@ final routes = [
     builder: (_, _) => const DashboardScreen(),
   ),
   RouteConfig(name: Routes.map, builder: (_, _) => const MapScreen()),
+  RouteConfig(
+    name: Routes.favorites,
+    builder: (_, _) => const FavoritesScreen(),
+  ),
 ];
 
 /// Application Routes
@@ -22,7 +27,7 @@ class Routes {
   static const String signup = '/signup';
   static const String dashboard = '/dashboard';
   static const String map = '/map';
+  static const String favorites = '/favorites';
 }
 
-class RouteArguments {
-}
+class RouteArguments {}

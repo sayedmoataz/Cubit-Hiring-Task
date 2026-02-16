@@ -14,7 +14,6 @@ import 'services/biometric_injection.dart';
 import 'services/cache_injection.dart';
 import 'services/firebase_injection.dart';
 import 'services/local_storage_injection.dart';
-import 'usecases_injections.dart';
 
 final sl = GetIt.instance;
 
@@ -53,9 +52,6 @@ Future<void> initEssentialServices() async {
 
   //! Repositories
   initRepositories();
-
-  //! UseCases
-  initUseCases();
 
   //! BLoCs / Cubits
   initBlocs();

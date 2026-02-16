@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import '../../../../../core/theme/colors.dart';
 import 'type_badge.dart';
 
-class BranchBasicInfo extends StatefulWidget {
+class BranchBasicInfo extends StatelessWidget {
   final String branchName;
   final bool isBranch;
   final bool isActive;
+  final bool isFavorite;
   final VoidCallback onClose;
   final VoidCallback? onFavorite;
 
@@ -15,17 +16,11 @@ class BranchBasicInfo extends StatefulWidget {
     required this.branchName,
     required this.isBranch,
     required this.isActive,
+    required this.isFavorite,
     required this.onClose,
     this.onFavorite,
     super.key,
   });
-
-  @override
-  State<BranchBasicInfo> createState() => _BranchBasicInfoState();
-}
-
-class _BranchBasicInfoState extends State<BranchBasicInfo> {
-  bool _isFavorite = false;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +31,7 @@ class _BranchBasicInfoState extends State<BranchBasicInfo> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.branchName,
+                branchName,
                 style: TextStyle(
                   fontSize: context.responsiveFontSize(18),
                   fontWeight: FontWeight.bold,
@@ -48,10 +43,10 @@ class _BranchBasicInfoState extends State<BranchBasicInfo> {
               Row(
                 children: [
                   TypeBadge(
-                    label: widget.isBranch ? 'Branch' : 'ATM',
-                    color: widget.isBranch ? AppColors.primary : Colors.teal,
+                    label: isBranch ? 'Branch' : 'ATM',
+                    color: isBranch ? AppColors.primary : Colors.teal,
                   ),
-                  if (!widget.isActive) ...[
+                  if (!isActive) ...[
                     SizedBox(width: context.spacing(ResponsiveSpacing.xs)),
                     const TypeBadge(label: 'Inactive', color: AppColors.error),
                   ],
@@ -62,17 +57,12 @@ class _BranchBasicInfoState extends State<BranchBasicInfo> {
         ),
         IconButton(
           icon: Icon(
-            _isFavorite ? Icons.favorite : Icons.favorite_border,
-            color: _isFavorite ? Colors.red : null,
+            isFavorite ? Icons.favorite : Icons.favorite_border,
+            color: isFavorite ? Colors.red : null,
           ),
-          onPressed: () {
-            setState(() {
-              _isFavorite = !_isFavorite;
-            });
-            widget.onFavorite?.call();
-          },
+          onPressed: onFavorite,
         ),
-        IconButton(icon: const Icon(Icons.close), onPressed: widget.onClose),
+        IconButton(icon: const Icon(Icons.close), onPressed: onClose),
       ],
     );
   }

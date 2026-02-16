@@ -39,6 +39,7 @@ class BranchData extends StatelessWidget {
               branchName: branch.name,
               isBranch: branch.isBranch,
               isActive: branch.isActive,
+              isFavorite: branch.isFavorite,
               onClose: onClose,
               onFavorite: () {
                 context.read<BranchesBloc>().add(

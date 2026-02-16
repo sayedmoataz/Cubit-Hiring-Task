@@ -1,0 +1,132 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ============================================================
+    // HELPER FUNCTIONS
+    // ============================================================
+    
+    /// Check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    /// Check if user owns the document
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    /// Validate branch data structure
+    function isValidBranchData() {
+      let data = request.resource.data;
+      
+      // Required fields check
+      return data.keys().hasAll([
+        'branchId', 
+        'name', 
+        'address', 
+        'lat', 
+        'lng', 
+        'addedAt'
+      ])
+      // Type validation
+      && data.branchId is string
+      && data.name is string
+      && data.address is string
+      && data.lat is number
+      && data.lng is number
+      && data.addedAt is timestamp
+      // Value validation
+      && data.branchId.size() > 0
+      && data.name.size() > 0
+      && data.address.size() > 0
+      && data.lat >= -90 && data.lat <= 90
+      && data.lng >= -180 && data.lng <= 180;
+    }
+    
+    /// Check if all required fields are present (no extra fields)
+    function hasOnlyAllowedFields() {
+      let data = request.resource.data;
+      let allowed = [
+        'branchId',
+        'name', 
+        'address',
+        'lat',
+        'lng',
+        'addedAt',
+        'type',
+        'isActive',
+        'services',
+        'workingHours',
+        'phone'
+      ];
+      
+      return data.keys().hasOnly(allowed);
+    }
+    
+    // ============================================================
+    // DEFAULT RULE - DENY ALL
+    // ============================================================
+    
+    match /{document=**} {
+      allow read, write: if false;
+    }
+    
+    // ============================================================
+    // USERS COLLECTION - READ ONLY (FUTURE USER PROFILES)
+    // ============================================================
+    
+    match /users/{userId} {
+      // Allow users to read their own profile
+      allow read: if isOwner(userId);
+      
+      // No writes allowed (profiles managed by backend)
+      allow write: if false;
+    }
+    
+    // ============================================================
+    // FAVORITES COLLECTION - MAIN RULES
+    // ============================================================
+    
+    match /users/{userId}/favorite_branches/{branchId} {
+      
+      // -------------------- READ RULES --------------------
+      
+      /// Users can read ONLY their own favorites
+      allow read: if isOwner(userId);
+      
+      // -------------------- CREATE RULES --------------------
+      
+      /// Users can create favorites with validation
+      allow create: if isOwner(userId)
+        && isValidBranchData()
+        && hasOnlyAllowedFields()
+        // Limit: Max 100 favorites per user (optional)
+        // NOTE: This requires a count query which is expensive
+        // Consider implementing limit in app logic instead
+      ;
+      
+      // -------------------- UPDATE RULES --------------------
+      
+      /// Favorites are IMMUTABLE - no updates allowed
+      /// Users must delete and recreate if needed
+      allow update: if false;
+      
+      // -------------------- DELETE RULES --------------------
+      
+      /// Users can delete ONLY their own favorites
+      allow delete: if isOwner(userId);
+    }
+    
+    // ============================================================
+    // QUERY LIMITS (Built-in Firestore Protection)
+    // ============================================================
+    
+    // Firestore automatically enforces:
+    // - Max 500 documents per query
+    // - Max 1 MB per document
+    // - Max 10 MB per batch write
+    // - Rate limiting per user/IP
+  }
+}

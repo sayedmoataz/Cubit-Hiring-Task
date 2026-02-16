@@ -119,6 +119,8 @@ class AppStrings {
   static const String loginToYourAccount = 'Login to your account';
   static const String biometricAuthenticationFailed =
       'Biometric authentication failed';
+  static const String reauthenticateToAccess =
+      'Please authenticate to continue using the app';
 
   static const String loadingBranches = 'Loading branches...';
   static const String findingNearbyLocations = 'Finding nearby locations';
@@ -143,4 +145,7 @@ class AppStrings {
   static const String transaction = 'Transaction';
   static const String noTransactionsYet = 'No transactions yet';
   static const String findBranch = 'Find Branch';
+  static const String retry = 'Retry';
+
+  static const String getDirections = 'Get Directions';
 }

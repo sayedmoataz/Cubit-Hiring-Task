@@ -16,12 +16,11 @@ class AuthGuard implements Guard {
       return await isAuthenticated!();
     }
 
-    // Default implementation: check for token in AppPrefsManager
     final prefs = sl<AppPrefsManager>();
     final token = await prefs.getToken();
     return token != null && token.isNotEmpty;
   }
 
   @override
-  String? get redirectTo => Routes.home;
+  String? get redirectTo => Routes.login;
 }
